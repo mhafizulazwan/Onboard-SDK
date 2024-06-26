@@ -21,7 +21,7 @@
 # *
 
 cmake_minimum_required(VERSION 2.8)
-project(djiosdk-mission-sample)
+project(trigger-micasense)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -g -O0")
 
@@ -37,17 +37,10 @@ if (OSDK_HOTPLUG)
     FILE(GLOB SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../hal/hotplug/*.c)
 endif ()
 
-add_executable(${PROJECT_NAME}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../common/dji_linux_environment.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../common/dji_linux_helpers.cpp
-        ${SOURCE_FILES}
-        main.cpp
-        mission_sample.cpp)
-
-if(WAYPT2_CORE)
 #waypoint v2
-
-add_executable(djiosdk-waypoint-v2-sample
+if(WAYPT2_CORE)
+add_executable(
+        ${PROJECT_NAME}
         ${SOURCE_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}/../../../core/src/waypoint_v2_sample.cpp
         waypoint_v2_main.cpp)

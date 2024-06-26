@@ -156,5 +156,6 @@ add_subdirectory(hms)
 add_subdirectory(battery)
 add_subdirectory(mop)
 add_subdirectory(test)
+add_subdirectory(trigger-micasense)
 
 
