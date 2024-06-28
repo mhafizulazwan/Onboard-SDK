@@ -42,8 +42,9 @@ if(WAYPT2_CORE)
 add_executable(
         ${PROJECT_NAME}
         ${SOURCE_FILES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../../core/src/waypoint_v2_sample.cpp
-        waypoint_v2_main.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        main.cpp
+        trigger_micasense.cpp)
 endif(WAYPT2_CORE)
 
 
