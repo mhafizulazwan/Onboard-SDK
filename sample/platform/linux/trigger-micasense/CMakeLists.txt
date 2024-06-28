@@ -44,7 +44,7 @@ add_executable(
         ${SOURCE_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}
         main.cpp
-        trigger_micasense.cpp)
+        prsb_algae_mission.cpp)
 endif(WAYPT2_CORE)
 
 

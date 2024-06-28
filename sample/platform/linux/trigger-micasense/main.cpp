@@ -29,7 +29,7 @@
  *
  */
 
-#include "waypoint_v2_sample.hpp"
+#include "prsb_algae_mission.hpp"
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
@@ -53,13 +53,13 @@ main(int argc, char** argv)
   /*! Obtain Control Authority*/
   vehicle->control->obtainCtrlAuthority(functionTimeout);
 
-  /*! Initialize a new WaypointV2 mission sample*/
-  auto *sample = new WaypointV2MissionSample(vehicle);
+  /*! Initialize a new WaypointV2 mission prsb*/
+  auto *prsb = new PrsbAlgaeMission(vehicle);
 
-  /*! run a new WaypointV2 mission sample*/
-  sample->runWaypointV2Mission();
+  /*! run a new WaypointV2 mission prsb*/
+  prsb->runPrsbAlgaeMission();
 
-  delete(sample);
+  delete(prsb);
 
   // Mission will continue when we exit here
   return 0;

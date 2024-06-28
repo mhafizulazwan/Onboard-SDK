@@ -29,7 +29,7 @@
  *
  */
 
-#include "trigger_micasense.hpp"
+#include "prsb_algae_mission.hpp"
 #include "dji_waypoint_v2_action.hpp"
 #include "memory"
 #include <ctime>
@@ -101,15 +101,15 @@ E_OsdkStat updateMissionEvent(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
   return OSDK_STAT_SYS_ERR;
 }
 
-WaypointV2MissionSample::WaypointV2MissionSample(Vehicle *vehicle):vehiclePtr(vehicle){
+PrsbAlgaeMission::PrsbAlgaeMission(Vehicle *vehicle):vehiclePtr(vehicle){
   vehiclePtr->waypointV2Mission->RegisterMissionEventCallback(vehicle->waypointV2Mission, updateMissionEvent);
   vehiclePtr->waypointV2Mission->RegisterMissionStateCallback(vehicle->waypointV2Mission, updateMissionState);
 }
 
-WaypointV2MissionSample::~WaypointV2MissionSample() {
+PrsbAlgaeMission::~PrsbAlgaeMission() {
 }
 
-bool WaypointV2MissionSample::setUpSubscription(int timeout) {
+bool PrsbAlgaeMission::setUpSubscription(int timeout) {
   // Telemetry: Verify the subscription
   ACK::ErrorCode subscribeStatus;
 
@@ -150,7 +150,7 @@ bool WaypointV2MissionSample::setUpSubscription(int timeout) {
   return true;
 }
 
-bool WaypointV2MissionSample::teardownSubscription(const int pkgIndex,
+bool PrsbAlgaeMission::teardownSubscription(const int pkgIndex,
                           int timeout) {
   ACK::ErrorCode ack =
       vehiclePtr->subscribe->removePackage(pkgIndex, timeout);
@@ -163,7 +163,7 @@ bool WaypointV2MissionSample::teardownSubscription(const int pkgIndex,
   return true;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::runWaypointV2Mission()
+ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
 {
   if (!vehiclePtr->isM300()) {
     DSTATUS("This sample only supports M300!");
@@ -258,16 +258,13 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::runWaypointV2Mission()
   return ErrorCode::SysCommonErr::Success;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::initMissionSetting(int timeout) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::initMissionSetting(int timeout) {
 
-  uint16_t polygonNum = 6;
-  float32_t radius = 6;
-
+  uint16_t waypointNum = 3;
   uint16_t actionNum = 5;
   srand(int(time(0)));
 
   /*! Generate waypoints*/
-
 
   /*! Generate actions*/
   this->actions = generateWaypointActions(actionNum);
@@ -281,7 +278,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::initMissionSetting(int timeout
   missionInitSettings.autoFlightSpeed = 2;
   missionInitSettings.exitMissionOnRCSignalLost = 1;
   missionInitSettings.gotoFirstWaypointMode = DJIWaypointV2MissionGotoFirstWaypointModePointToPoint;
-  missionInitSettings.mission =  generatePolygonWaypoints(radius, polygonNum);
+  missionInitSettings.mission =  generateAlgaeWaypoints(waypointNum);
   missionInitSettings.missTotalLen = missionInitSettings.mission.size();
 
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->init(&missionInitSettings,timeout);
@@ -298,7 +295,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::initMissionSetting(int timeout
   return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::uploadWaypointMission(int timeout) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::uploadWaypointMission(int timeout) {
 
 //  ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->uploadMission(this->mission,timeout);
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->uploadMission(timeout);
@@ -315,7 +312,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::uploadWaypointMission(int time
   return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::downloadWaypointMission(std::vector<WaypointV2> &mission,int timeout)
+ErrorCode::ErrorCodeType PrsbAlgaeMission::downloadWaypointMission(std::vector<WaypointV2> &mission,int timeout)
 {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->downloadMission(mission, timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
@@ -331,7 +328,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::downloadWaypointMission(std::v
   return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::uploadWapointActions(int timeout)
+ErrorCode::ErrorCodeType PrsbAlgaeMission::uploadWapointActions(int timeout)
 {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->uploadAction(actions,timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
@@ -347,7 +344,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::uploadWapointActions(int timeo
     return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::startWaypointMission(int timeout) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::startWaypointMission(int timeout) {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->start(timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
   {
@@ -362,12 +359,12 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::startWaypointMission(int timeo
   return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::stopWaypointMission(int timeout) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::stopWaypointMission(int timeout) {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->stop(timeout);
   return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::pauseWaypointMission(int timeout) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::pauseWaypointMission(int timeout) {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->pause(timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
   {
@@ -383,7 +380,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::pauseWaypointMission(int timeo
   return ret;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::resumeWaypointMission(int timeout) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::resumeWaypointMission(int timeout) {
 
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->resume(timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
@@ -399,7 +396,7 @@ ErrorCode::ErrorCodeType WaypointV2MissionSample::resumeWaypointMission(int time
   return ret;
 }
 
-void  WaypointV2MissionSample::getGlobalCruiseSpeed(int timeout)
+void  PrsbAlgaeMission::getGlobalCruiseSpeed(int timeout)
 {
   GlobalCruiseSpeed cruiseSpeed = 0;
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->getGlobalCruiseSpeed(cruiseSpeed, timeout);
@@ -412,7 +409,7 @@ void  WaypointV2MissionSample::getGlobalCruiseSpeed(int timeout)
   DSTATUS("Current cruise speed is: %f m/s",cruiseSpeed);
 }
 
-void WaypointV2MissionSample::setGlobalCruiseSpeed(const GlobalCruiseSpeed &cruiseSpeed, int timeout)
+void PrsbAlgaeMission::setGlobalCruiseSpeed(const GlobalCruiseSpeed &cruiseSpeed, int timeout)
 {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->setGlobalCruiseSpeed(cruiseSpeed, timeout);
   if(ret !=  ErrorCode::SysCommonErr::Success)
@@ -424,7 +421,7 @@ void WaypointV2MissionSample::setGlobalCruiseSpeed(const GlobalCruiseSpeed &crui
   DSTATUS("Current cruise speed is: %f m/s", cruiseSpeed);
 }
 
-std::vector<WaypointV2> WaypointV2MissionSample::generatePolygonWaypoints(float32_t radius, uint16_t polygonNum) {
+std::vector<WaypointV2> PrsbAlgaeMission::generateAlgaeWaypoints(uint16_t waypointNum) {
   // Let's create a vector to store our waypoints in.
   std::vector<WaypointV2> waypointList;
   WaypointV2 startPoint;
@@ -437,22 +434,35 @@ std::vector<WaypointV2> WaypointV2MissionSample::generatePolygonWaypoints(float3
   setWaypointV2Defaults(startPoint);
   waypointList.push_back(startPoint);
 
-  // Iterative algorithm
-  for (int i = 0; i < polygonNum; i++) {
-    float32_t angle = i * 2 * M_PI / polygonNum;
-    setWaypointV2Defaults(waypointV2);
-    float32_t X = radius * cos(angle);
-    float32_t Y = radius * sin(angle);
-    waypointV2.latitude = X/EARTH_RADIUS + startPoint.latitude;
-    waypointV2.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
-    waypointV2.relativeHeight = startPoint.relativeHeight ;
+  // Define all the latitudes of the mission
+  std::vector<float64_t> latitudes;
+  latitudes.push_back(0.0);
+  latitudes.push_back(0.0);
+  latitudes.push_back(0.0);
+
+  // Define all the longitudes of the mission
+  std::vector<float64_t> longitudes;
+  longitudes.push_back(0.0);
+  longitudes.push_back(0.0);
+  longitudes.push_back(0.0);
+
+  // Define all the relative heights of the mission
+  std::vector<float32_t> relativeHeights;
+  relativeHeights.push_back(10.0);
+  relativeHeights.push_back(8.0);
+  relativeHeights.push_back(5.0);
+
+  for (int i = 0; i < waypointNum; i++) {
+    waypointV2.latitude = latitudes[i]; // latitude of algae tank
+    waypointV2.longitude = longitudes[i]; // longitude of algae tank
+    waypointV2.relativeHeight = relativeHeights[i]; // height relative to algae tank
     waypointList.push_back(waypointV2);
   }
   waypointList.push_back(startPoint);
   return waypointList;
 }
 
-std::vector<DJIWaypointV2Action> WaypointV2MissionSample::generateWaypointActions(uint16_t actionNum)
+std::vector<DJIWaypointV2Action> PrsbAlgaeMission::generateWaypointActions(uint16_t actionNum)
 {
   std::vector<DJIWaypointV2Action> actionVector;
 
@@ -471,7 +481,7 @@ std::vector<DJIWaypointV2Action> WaypointV2MissionSample::generateWaypointAction
   return actionVector;
 }
 
-void WaypointV2MissionSample::setWaypointV2Defaults(WaypointV2& waypointV2) {
+void PrsbAlgaeMission::setWaypointV2Defaults(WaypointV2& waypointV2) {
 
   waypointV2.waypointType = DJIWaypointV2FlightPathModeGoToPointInAStraightLineAndStop;
   waypointV2.headingMode = DJIWaypointV2HeadingModeAuto;
@@ -489,7 +499,7 @@ void WaypointV2MissionSample::setWaypointV2Defaults(WaypointV2& waypointV2) {
   waypointV2.autoFlightSpeed = 2;
 }
 
-ErrorCode::ErrorCodeType WaypointV2MissionSample::getActionRemainMemory
+ErrorCode::ErrorCodeType PrsbAlgaeMission::getActionRemainMemory
     (GetRemainRamAck &actionMemory, int timeout) {
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->getActionRemainMemory(actionMemory, timeout);
   if(ret != ErrorCode::SysCommonErr::Success)

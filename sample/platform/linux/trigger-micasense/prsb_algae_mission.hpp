@@ -44,12 +44,12 @@
 // Helpers
 #include <dji_linux_helpers.hpp>
 const int DEFAULT_PACKAGE_INDEX = 0;
-class WaypointV2MissionSample {
+class PrsbAlgaeMission {
 
 public:
-  WaypointV2MissionSample(Vehicle *vehicle);
+  PrsbAlgaeMission(Vehicle *vehicle);
 
-  ~WaypointV2MissionSample();
+  ~PrsbAlgaeMission();
 
 public:
   /*! @brief Sample to run a complete mission, include init mission,
@@ -58,7 +58,7 @@ public:
    *  @note If any one of the steps fails, it will return the failed error code
    *  @return ErrorCode::ErrorCodeType error code
    */
-  ErrorCode::ErrorCodeType runWaypointV2Mission();
+  ErrorCode::ErrorCodeType runPrsbAlgaeMission();
 
   /*! @brief Sample to init mission settings,
    *
@@ -159,7 +159,7 @@ public:
    */
 //  std::vector<DJIWaypointV2> generatePolygonWaypoints(float32_t radius, uint16_t polygonNum);
 
-  std::vector<WaypointV2> generatePolygonWaypoints(float32_t radius, uint16_t polygonNum);
+  std::vector<WaypointV2> generateAlgaeWaypoints(uint16_t waypointNum);
 
 
   /*! @brief Sample generate polygon waypoints
