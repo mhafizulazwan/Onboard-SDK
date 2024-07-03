@@ -30,6 +30,7 @@
  */
 
 #include "prsb_algae_mission.hpp"
+#include <iostream>
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
@@ -66,11 +67,13 @@ main(int argc, char** argv)
   startPoint.longitude = subscribeGPosition.longitude;
   startPoint.relativeHeight = 15;
   waypointList.push_back(startPoint);
-
+  std::cout << "Start Point: " << startPoint.latitude << ", " << startPoint.longitude << ", " << startPoint.relativeHeight << std::endl;
+  
   endPoint.latitude  = startPoint.latitude + 0.0001;
   endPoint.longitude = startPoint.longitude + 0.0001;
   endPoint.relativeHeight = 15;
   waypointList.push_back(endPoint);
+  std::cout << "End Point: " << endPoint.latitude << ", " << endPoint.longitude << ", " << endPoint.relativeHeight << std::endl;
 
   /*Let's define what the drone will do once finished the action 
     options: DJIWaypointV2MissionFinishedGoHome, DJIWaypointV2MissionFinishedNoAction */ 
