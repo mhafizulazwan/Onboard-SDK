@@ -58,14 +58,14 @@ public:
    *  @note If any one of the steps fails, it will return the failed error code
    *  @return ErrorCode::ErrorCodeType error code
    */
-  ErrorCode::ErrorCodeType runPrsbAlgaeMission();
+  ErrorCode::ErrorCodeType runPrsbAlgaeMission(std::vector<WaypointV2> &waypointList, DJIWaypointV2MissionFinishedAction finishedAction);
 
   /*! @brief Sample to init mission settings,
    *
    *  @param timeout blocking timeout in seconds
    *  @return ErrorCode::ErrorCodeType error code
    */
-  ErrorCode::ErrorCodeType initMissionSetting(int timeout);
+  ErrorCode::ErrorCodeType initMissionSetting(int timeout, std::vector<WaypointV2> &waypointList, DJIWaypointV2MissionFinishedAction finishedAction);
 
   /*! @brief Sample to upload mission
    *
@@ -159,14 +159,15 @@ public:
    */
 //  std::vector<DJIWaypointV2> generatePolygonWaypoints(float32_t radius, uint16_t polygonNum);
 
-  std::vector<WaypointV2> generateAlgaeWaypoints(uint16_t waypointNum);
+  // std::vector<WaypointV2> generateAlgaeWaypoints(uint16_t waypointNum);
 
 
-  /*! @brief Sample generate polygon waypoints
-   *
-   *  @param actionNum number of actions
-   *  @param vector of DJIWaypointV2Action
-   */
+  // /*! @brief Sample generate polygon waypoints
+  //  *
+  //  *  @param actionNum number of actions
+  //  *  @param vector of DJIWaypointV2Action
+  //  */
+
   std::vector<DJIWaypointV2Action> generateWaypointActions(uint16_t actionNum);
 
   /*! @brief Get action's remain memory.Only if remian memory is enough, action can be uploaded successfully!
