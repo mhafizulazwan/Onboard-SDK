@@ -59,12 +59,18 @@ main(int argc, char** argv)
   // Let's create a vector to store our waypoints in.
   std::vector<WaypointV2> waypointList;
   WaypointV2 startPoint;
+  WaypointV2 endPoint;
 
   Telemetry::TypeMap<TOPIC_GPS_FUSED>::type subscribeGPosition = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
   startPoint.latitude  = subscribeGPosition.latitude;
   startPoint.longitude = subscribeGPosition.longitude;
   startPoint.relativeHeight = 15;
   waypointList.push_back(startPoint);
+
+  endPoint.latitude  = startPoint.latitude + 0.0001;
+  endPoint.longitude = startPoint.longitude + 0.0001;
+  endPoint.relativeHeight = 15;
+  waypointList.push_back(endPoint);
 
   /*Let's define what the drone will do once finished the action 
     options: DJIWaypointV2MissionFinishedGoHome, DJIWaypointV2MissionFinishedNoAction */ 
