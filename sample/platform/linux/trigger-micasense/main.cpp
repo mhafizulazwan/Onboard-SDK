@@ -60,14 +60,14 @@ main(int argc, char** argv)
   std::vector<WaypointV2> waypointList;
   WaypointV2 startPoint;
 
-  // Telemetry::TypeMap<TOPIC_GPS_FUSED>::type subscribeGPosition = vehiclePtr->subscribe->getValue<TOPIC_GPS_FUSED>();
-  startPoint.latitude  = 0.0; // subscribeGPosition.latitude
-  startPoint.longitude = 0.0; // subscribeGPosition.longitude;
+  Telemetry::TypeMap<TOPIC_GPS_FUSED>::type subscribeGPosition = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
+  startPoint.latitude  = subscribeGPosition.latitude;
+  startPoint.longitude = subscribeGPosition.longitude;
   startPoint.relativeHeight = 15;
   waypointList.push_back(startPoint);
 
-  // Let's define what the drone will do once finished the action 
-  // options : DJIWaypointV2MissionFinishedGoHome, DJIWaypointV2MissionFinishedNoAction 
+  /*Let's define what the drone will do once finished the action 
+    options: DJIWaypointV2MissionFinishedGoHome, DJIWaypointV2MissionFinishedNoAction */ 
   DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedGoHome;
   
   /*! run a new WaypointV2 mission prsb*/
