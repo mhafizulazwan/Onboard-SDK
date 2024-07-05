@@ -163,31 +163,33 @@ bool PrsbAlgaeMission::teardownSubscription(const int pkgIndex,
   return true;
 }
 
-ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<WaypointV2> &waypointList, DJIWaypointV2MissionFinishedAction finishedAction)
+ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<WaypointV2> &GPosition, DJIWaypointV2MissionFinishedAction finishedAction)
 {
   if (!vehiclePtr->isM300()) {
     DSTATUS("This only supports M300!");
     return false;
   }
 
+
   int timeout = 1;
   GetRemainRamAck actionMemory = {0};
   ErrorCode::ErrorCodeType ret;
 
-  if (!setUpSubscription(timeout))
-  {
-    DERROR("Failed to set up subscription!");
-    return -1;
-  }
-  else
-  {
-    DSTATUS("Set up subscription successfully!");
-  }
+  // if (!setUpSubscription(timeout))
+  // {
+  //   DERROR("Failed to set up subscription!");
+  //   return -1;
+  // }
+  // else
+  // {
+  //   DSTATUS("Set up subscription successfully!");
+  // }
   /*! wait for subscription data come*/
-  sleep(timeout);
+  // sleep(timeout);
 
   /*! init mission */
-  ret = initMissionSetting(timeout,waypointList,finishedAction);
+  ret = initMissionSetting(timeout,GPosition,finishedAction);
+  
   if(ret != ErrorCode::SysCommonErr::Success)
     return ret;
   sleep(timeout);
@@ -258,7 +260,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<Waypo
   return ErrorCode::SysCommonErr::Success;
 }
 
-ErrorCode::ErrorCodeType PrsbAlgaeMission::initMissionSetting(int timeout, std::vector<WaypointV2> &waypointList, DJIWaypointV2MissionFinishedAction finishedAction) {
+ErrorCode::ErrorCodeType PrsbAlgaeMission::initMissionSetting(int timeout, std::vector<WaypointV2> GPosition, DJIWaypointV2MissionFinishedAction finishedAction) {
 
   uint16_t waypointNum = 3;
   uint16_t actionNum = 5;
@@ -278,7 +280,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::initMissionSetting(int timeout, std::
   missionInitSettings.autoFlightSpeed = 2;
   missionInitSettings.exitMissionOnRCSignalLost = 1;
   missionInitSettings.gotoFirstWaypointMode = DJIWaypointV2MissionGotoFirstWaypointModePointToPoint;
-  missionInitSettings.mission =  waypointList;
+  missionInitSettings.mission =  GPosition;
   missionInitSettings.missTotalLen = missionInitSettings.mission.size();
 
   ErrorCode::ErrorCodeType ret = vehiclePtr->waypointV2Mission->init(&missionInitSettings,timeout);
@@ -419,6 +421,18 @@ void PrsbAlgaeMission::setGlobalCruiseSpeed(const GlobalCruiseSpeed &cruiseSpeed
     return;
   }
   DSTATUS("Current cruise speed is: %f m/s", cruiseSpeed);
+}
+
+std::vector<WaypointV2> PrsbAlgaeMission::getGPosition() {
+  // Let's create a vector to store our GPS position.
+  std::vector<WaypointV2> GPosition;
+  WaypointV2 Point;
+
+  Telemetry::TypeMap<TOPIC_GPS_FUSED>::type subscribeGPosition = vehiclePtr->subscribe->getValue<TOPIC_GPS_FUSED>();
+  Point.latitude  = subscribeGPosition.latitude;
+  Point.longitude = subscribeGPosition.longitude;
+  GPosition.push_back(Point);
+  return GPosition;
 }
 
 std::vector<DJIWaypointV2Action> PrsbAlgaeMission::generateWaypointActions(uint16_t actionNum)

@@ -30,7 +30,6 @@
  */
 
 #include "prsb_algae_mission.hpp"
-#include <iostream>
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
@@ -54,27 +53,56 @@ main(int argc, char** argv)
   /*! Obtain Control Authority*/
   vehicle->control->obtainCtrlAuthority(functionTimeout);
 
-  /*! Initialize a new WaypointV2 mission prsb*/
+  
   auto *prsb = new PrsbAlgaeMission(vehicle);
 
-  // Let's create a vector to store our waypoints in.
+  /*! Setup Subscription*/
+  int timeout = 3;
+  if (!prsb->setUpSubscription(timeout))
+  {
+    DERROR("Failed to set up subscription!");
+    return -1;
+  }
+  else
+  {
+    DSTATUS("Set up subscription successfully!");
+  }
+  sleep(timeout);
+
+  // Get GPS position.
+  std::vector<WaypointV2> GPosition;
+  GPosition = prsb->getGPosition();
+  
+  // Create a vector to store waypoints in.
   std::vector<WaypointV2> waypointList;
   WaypointV2 startPoint;
   WaypointV2 endPoint;
 
-  Telemetry::TypeMap<TOPIC_GPS_FUSED>::type subscribeGPosition = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
-  startPoint.latitude  = subscribeGPosition.latitude;
-  startPoint.longitude = subscribeGPosition.longitude;
+  // Define startpoint.
+  startPoint.latitude  = GPosition[0].latitude; 
+  startPoint.longitude = GPosition[0].longitude; 
   startPoint.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(startPoint);
   waypointList.push_back(startPoint);
-  std::cout << "Start Point: " << startPoint.latitude << ", " << startPoint.longitude << ", " << startPoint.relativeHeight << std::endl;
   
-  endPoint.latitude  = startPoint.latitude + 0.0001;
-  endPoint.longitude = startPoint.longitude + 0.0001;
-  endPoint.relativeHeight = 15;
-  waypointList.push_back(endPoint);
-  std::cout << "End Point: " << endPoint.latitude << ", " << endPoint.longitude << ", " << endPoint.relativeHeight << std::endl;
+  DSTATUS("Latitude start:%f",GPosition[0].latitude);
+  DSTATUS("Longitude start:%f",GPosition[0].longitude);
 
+  // Define Cartesian coordinates.
+  float32_t radius = 6;
+  float32_t X = radius * cos(0);
+  float32_t Y = radius * sin(0);
+
+  // Define endpoint: convert Cartesian to GPS coordinates.
+  endPoint.latitude = X/EARTH_RADIUS + startPoint.latitude;
+  endPoint.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
+  endPoint.relativeHeight = startPoint.relativeHeight;
+  prsb->setWaypointV2Defaults(endPoint);
+  waypointList.push_back(endPoint);
+
+  DSTATUS("Latitude end:%f",endPoint.latitude);
+  DSTATUS("Longitude end:%f",endPoint.longitude);
+  
   /*Let's define what the drone will do once finished the action 
     options: DJIWaypointV2MissionFinishedGoHome, DJIWaypointV2MissionFinishedNoAction */ 
   DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedGoHome;

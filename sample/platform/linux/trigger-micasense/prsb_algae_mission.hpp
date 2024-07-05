@@ -65,7 +65,7 @@ public:
    *  @param timeout blocking timeout in seconds
    *  @return ErrorCode::ErrorCodeType error code
    */
-  ErrorCode::ErrorCodeType initMissionSetting(int timeout, std::vector<WaypointV2> &waypointList, DJIWaypointV2MissionFinishedAction finishedAction);
+  ErrorCode::ErrorCodeType initMissionSetting(int timeout, std::vector<WaypointV2> waypointList, DJIWaypointV2MissionFinishedAction finishedAction);
 
   /*! @brief Sample to upload mission
    *
@@ -136,6 +136,8 @@ public:
    *  @return bool result, 0:fail, 1:success
    */
   bool setUpSubscription(int timeout);
+  
+  std::vector<WaypointV2> getGPosition();
 
   /*! @brief Sample to tear down subscription
    *
