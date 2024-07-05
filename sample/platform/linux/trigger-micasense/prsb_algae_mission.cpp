@@ -121,7 +121,7 @@ bool PrsbAlgaeMission::setUpSubscription(int timeout) {
   //TOPIC_ALTITUDE_OF_HOMEPOINT, TOPIC_GPS_POSITION
   // Telemetry: Subscribe to flight status and mode at freq 10 Hz
   int freq = 1;
-  TopicName topicList10Hz[] = {TOPIC_GPS_FUSED };
+  TopicName topicList10Hz[] = {TOPIC_GPS_FUSED};
   int numTopic = sizeof(topicList10Hz) / sizeof(topicList10Hz[0]);
   bool enableTimestamp = false;
 
