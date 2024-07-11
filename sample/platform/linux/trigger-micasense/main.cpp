@@ -30,6 +30,7 @@
  */
 
 #include "prsb_algae_mission.hpp"
+#include "micasense.hpp"
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
@@ -38,8 +39,8 @@ int
 main(int argc, char** argv)
 {
   /*! Initialize variables*/
-
-  int functionTimeout = 1;
+  int Timeout = 1;
+  
   /*! Setup OSDK.*/
   LinuxSetup linuxEnvironment(argc, argv);
   Vehicle*   vehicle = linuxEnvironment.getVehicle();
@@ -48,17 +49,15 @@ main(int argc, char** argv)
     std::cout << "Vehicle not initialized, exiting.\n";
     return -1;
   }
-  int responseTimeout = 1;
 
   /*! Obtain Control Authority*/
-  vehicle->control->obtainCtrlAuthority(functionTimeout);
+  vehicle->control->obtainCtrlAuthority(Timeout);
 
   
   auto *prsb = new PrsbAlgaeMission(vehicle);
 
-  /*! Setup Subscription*/
-  int timeout = 3;
-  if (!prsb->setUpSubscription(timeout))
+  /*! Setup subscription*/
+  if (!prsb->setUpSubscription(Timeout))
   {
     DERROR("Failed to set up subscription!");
     return -1;
@@ -67,7 +66,7 @@ main(int argc, char** argv)
   {
     DSTATUS("Set up subscription successfully!");
   }
-  sleep(timeout);
+  sleep(Timeout);
 
   // Get GPS position.
   std::vector<WaypointV2> GPosition;
@@ -85,8 +84,8 @@ main(int argc, char** argv)
   prsb->setWaypointV2Defaults(startPoint);
   waypointList.push_back(startPoint);
   
-  DSTATUS("Latitude start:%f",GPosition[0].latitude);
-  DSTATUS("Longitude start:%f",GPosition[0].longitude);
+  DSTATUS("Start point latitude:%f",GPosition[0].latitude);
+  DSTATUS("Start point longitude:%f",GPosition[0].longitude);
 
   // Define Cartesian coordinates.
   float32_t radius = 6;
@@ -100,17 +99,21 @@ main(int argc, char** argv)
   prsb->setWaypointV2Defaults(endPoint);
   waypointList.push_back(endPoint);
 
-  DSTATUS("Latitude end:%f",endPoint.latitude);
-  DSTATUS("Longitude end:%f",endPoint.longitude);
+  DSTATUS("End point latitude:%f",endPoint.latitude);
+  DSTATUS("End point longitude:%f",endPoint.longitude);
   
   /*Let's define what the drone will do once finished the action 
-    options: DJIWaypointV2MissionFinishedGoHome, DJIWaypointV2MissionFinishedNoAction */ 
-  DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedGoHome;
+    options: 1) DJIWaypointV2MissionFinishedGoHome, 2) DJIWaypointV2MissionFinishedNoAction */ 
+  DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedNoAction;
   
   /*! run a new WaypointV2 mission prsb*/
   prsb->runPrsbAlgaeMission(waypointList, finishedAction);
 
   delete(prsb);
+
+  // Capture and sync images from Micasense camera
+  ImageCapture micasense;
+  micasense.captureAndSyncImages();
 
   // Mission will continue when we exit here
   return 0;

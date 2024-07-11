@@ -25,6 +25,8 @@ project(trigger-micasense)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -g -O0")
 
+find_package(CURL REQUIRED)
+
 FILE(GLOB SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../common/dji_linux_environment.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../common/dji_linux_helpers.cpp
@@ -32,6 +34,7 @@ FILE(GLOB SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../osal/*.c
         )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../core/inc)
+include_directories(${CURL_INCLUDE_DIR})
 
 if (OSDK_HOTPLUG)
     FILE(GLOB SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../hal/hotplug/*.c)
@@ -44,7 +47,9 @@ add_executable(
         ${SOURCE_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}
         main.cpp
-        prsb_algae_mission.cpp)
+        prsb_algae_mission.cpp
+        micasense.cpp)
+target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
 endif(WAYPT2_CORE)
 
 
