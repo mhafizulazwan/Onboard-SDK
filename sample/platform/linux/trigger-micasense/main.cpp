@@ -75,7 +75,9 @@ main(int argc, char** argv)
   // Create a vector to store waypoints in.
   std::vector<WaypointV2> waypointList;
   WaypointV2 startPoint;
-  WaypointV2 endPoint;
+  WaypointV2 endPoint0;
+  WaypointV2 endPoint1;
+  WaypointV2 endPoint2;
 
   // Define startpoint.
   startPoint.latitude  = GPosition[0].latitude; 
@@ -93,18 +95,30 @@ main(int argc, char** argv)
   float32_t Y = radius * sin(0);
 
   // Define endpoint: convert Cartesian to GPS coordinates.
-  endPoint.latitude = X/EARTH_RADIUS + startPoint.latitude;
-  endPoint.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
-  endPoint.relativeHeight = startPoint.relativeHeight;
-  prsb->setWaypointV2Defaults(endPoint);
-  waypointList.push_back(endPoint);
+  endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
+  endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
+  endPoint0.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(endPoint0);
+  waypointList.push_back(endPoint0);
+  
+  endPoint1.latitude = 0.051875;
+  endPoint1.longitude = 1.77572;
+  endPoint1.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(endPoint1);
+  waypointList.push_back(endPoint1);
 
-  DSTATUS("End point latitude:%f",endPoint.latitude);
-  DSTATUS("End point longitude:%f",endPoint.longitude);
+  DSTATUS("End point latitude:%f",endPoint1.latitude);
+  DSTATUS("End point longitude:%f",endPoint1.longitude);
+
+  endPoint2.latitude = 0.051875;
+  endPoint2.longitude = 1.77572;
+  endPoint2.relativeHeight = 10;
+  prsb->setWaypointV2Defaults(endPoint2);
+  waypointList.push_back(endPoint2);
   
   /*Let's define what the drone will do once finished the action 
     options: 1) DJIWaypointV2MissionFinishedGoHome, 2) DJIWaypointV2MissionFinishedNoAction */ 
-  DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedNoAction;
+  DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedGoHome;
   
   /*! run a new WaypointV2 mission prsb*/
   prsb->runPrsbAlgaeMission(waypointList, finishedAction);
@@ -112,8 +126,8 @@ main(int argc, char** argv)
   delete(prsb);
 
   // Capture and sync images from Micasense camera
-  ImageCapture micasense;
-  micasense.captureAndSyncImages();
+  // ImageCapture micasense;
+  // micasense.captureAndSyncImages();
 
   // Mission will continue when we exit here
   return 0;
