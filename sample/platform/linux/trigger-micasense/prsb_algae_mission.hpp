@@ -58,7 +58,7 @@ public:
    *  @note If any one of the steps fails, it will return the failed error code
    *  @return ErrorCode::ErrorCodeType error code
    */
-  ErrorCode::ErrorCodeType runPrsbAlgaeMission(std::vector<WaypointV2> &waypointList, DJIWaypointV2MissionFinishedAction finishedAction);
+  ErrorCode::ErrorCodeType runPrsbAlgaeMission();
 
   /*! @brief Sample to init mission settings,
    *

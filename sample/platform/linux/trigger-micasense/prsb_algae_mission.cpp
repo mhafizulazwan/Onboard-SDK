@@ -163,13 +163,12 @@ bool PrsbAlgaeMission::teardownSubscription(const int pkgIndex,
   return true;
 }
 
-ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<WaypointV2> &GPosition, DJIWaypointV2MissionFinishedAction finishedAction)
+ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
 {
   if (!vehiclePtr->isM300()) {
     DSTATUS("This only supports M300!");
     return false;
   }
-
 
   int timeout = 1;
   GetRemainRamAck actionMemory = {0};
@@ -188,11 +187,11 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<Waypo
   // sleep(timeout);
 
   /*! init mission */
-  ret = initMissionSetting(timeout,GPosition,finishedAction);
+  // ret = initMissionSetting(timeout,GPosition,finishedAction);
   
-  if(ret != ErrorCode::SysCommonErr::Success)
-    return ret;
-  sleep(timeout);
+  // if(ret != ErrorCode::SysCommonErr::Success)
+  //   return ret;
+  // sleep(timeout);
 
   /*! upload mission */
   /*! upload mission's timeout need to be longer than 2s*/
@@ -229,7 +228,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<Waypo
   ret = startWaypointMission(timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
     return ret;
-  sleep(20);
+  // sleep(20);
 
   /*! set global cruise speed */
   setGlobalCruiseSpeed(1.5, timeout);
@@ -240,16 +239,17 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission(std::vector<Waypo
   sleep(timeout);
 
   /*! pause the mission*/
-  ret = pauseWaypointMission(timeout);
-  if(ret != ErrorCode::SysCommonErr::Success)
-    return ret;
-  sleep(5);
+  // ret = pauseWaypointMission(timeout);
+  // if(ret != ErrorCode::SysCommonErr::Success)
+  //   return ret;
+  // sleep(5);
 
   /*! resume the mission*/
-  ret = resumeWaypointMission(timeout);
-  if(ret != ErrorCode::SysCommonErr::Success)
-    return ret;
-  sleep(50);
+  // ret = resumeWaypointMission(timeout);
+  // if(ret != ErrorCode::SysCommonErr::Success)
+  //   return ret;
+  // sleep(50);
+
   /*! Set up telemetry subscription*/
   if(!teardownSubscription(DEFAULT_PACKAGE_INDEX, timeout))
   {

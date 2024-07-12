@@ -39,7 +39,7 @@ int
 main(int argc, char** argv)
 {
   /*! Initialize variables*/
-  int Timeout = 1;
+  int timeout = 1;
   
   /*! Setup OSDK.*/
   LinuxSetup linuxEnvironment(argc, argv);
@@ -51,13 +51,12 @@ main(int argc, char** argv)
   }
 
   /*! Obtain Control Authority*/
-  vehicle->control->obtainCtrlAuthority(Timeout);
+  vehicle->control->obtainCtrlAuthority(timeout);
 
-  
   auto *prsb = new PrsbAlgaeMission(vehicle);
 
   /*! Setup subscription*/
-  if (!prsb->setUpSubscription(Timeout))
+  if (!prsb->setUpSubscription(timeout))
   {
     DERROR("Failed to set up subscription!");
     return -1;
@@ -66,9 +65,9 @@ main(int argc, char** argv)
   {
     DSTATUS("Set up subscription successfully!");
   }
-  sleep(Timeout);
+  sleep(timeout);
 
-  // Get GPS position.
+  /*! Define waypoints.*/
   std::vector<WaypointV2> GPosition;
   GPosition = prsb->getGPosition();
   
@@ -90,16 +89,16 @@ main(int argc, char** argv)
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
 
   // Define Cartesian coordinates.
-  float32_t radius = 6;
-  float32_t X = radius * cos(0);
-  float32_t Y = radius * sin(0);
+  // float32_t radius = 6;
+  // float32_t X = radius * cos(0);
+  // float32_t Y = radius * sin(0);
 
   // Define endpoint: convert Cartesian to GPS coordinates.
-  endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
-  endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
-  endPoint0.relativeHeight = 15;
-  prsb->setWaypointV2Defaults(endPoint0);
-  waypointList.push_back(endPoint0);
+  // endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
+  // endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
+  // endPoint0.relativeHeight = 15;
+  // prsb->setWaypointV2Defaults(endPoint0);
+  // waypointList.push_back(endPoint0);
   
   endPoint1.latitude = 0.051875;
   endPoint1.longitude = 1.77572;
@@ -112,22 +111,42 @@ main(int argc, char** argv)
 
   endPoint2.latitude = 0.051875;
   endPoint2.longitude = 1.77572;
-  endPoint2.relativeHeight = 10;
+  endPoint2.relativeHeight = 8;
   prsb->setWaypointV2Defaults(endPoint2);
   waypointList.push_back(endPoint2);
   
-  /*Let's define what the drone will do once finished the action 
-    options: 1) DJIWaypointV2MissionFinishedGoHome, 2) DJIWaypointV2MissionFinishedNoAction */ 
-  DJIWaypointV2MissionFinishedAction finishedAction = DJIWaypointV2MissionFinishedGoHome;
-  
+  /*Initialize the mission */ 
+  DJIWaypointV2MissionFinishedAction finishedAction;
+  finishedAction = DJIWaypointV2MissionFinishedNoAction;
+
+  ErrorCode::ErrorCodeType ret;
+  ret = prsb->initMissionSetting(timeout,waypointList,finishedAction);
+  if(ret != ErrorCode::SysCommonErr::Success)
+    return ret;
+  sleep(timeout);
+
   /*! run a new WaypointV2 mission prsb*/
-  prsb->runPrsbAlgaeMission(waypointList, finishedAction);
+  prsb->runPrsbAlgaeMission();
+  waypointList.clear();
+
+  /*! Capture and sync images from Micasense camera*/
+  ImageCapture micasense;
+  micasense.captureAndSyncImages();
+
+  /*! Define waypoints.*/
+  waypointList.push_back(endPoint2);
+  waypointList.push_back(endPoint1);
+
+  finishedAction = DJIWaypointV2MissionFinishedGoHome;
+  ret = prsb->initMissionSetting(timeout,waypointList,finishedAction);
+  if(ret != ErrorCode::SysCommonErr::Success)
+    return ret;
+  sleep(timeout);
+
+  /*! run a new WaypointV2 mission prsb*/
+  prsb->runPrsbAlgaeMission();
 
   delete(prsb);
-
-  // Capture and sync images from Micasense camera
-  // ImageCapture micasense;
-  // micasense.captureAndSyncImages();
 
   // Mission will continue when we exit here
   return 0;
