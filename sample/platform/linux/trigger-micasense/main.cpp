@@ -118,33 +118,31 @@ main(int argc, char** argv)
   /*Initialize the mission */ 
   DJIWaypointV2MissionFinishedAction finishedAction;
   finishedAction = DJIWaypointV2MissionFinishedNoAction;
-
-  ErrorCode::ErrorCodeType ret;
-  ret = prsb->initMissionSetting(timeout,waypointList,finishedAction);
-  if(ret != ErrorCode::SysCommonErr::Success)
-    return ret;
-  sleep(timeout);
+  prsb->initMissionSetting(timeout,waypointList,finishedAction);
+  
+  /*! Setup Micasense*/
+  ImageCapture micasense;
 
   /*! run a new WaypointV2 mission prsb*/
-  prsb->runPrsbAlgaeMission();
+  ErrorCode::ErrorCodeType ret;
+  ret = prsb->runPrsbAlgaeMission();
+  if(ret == ErrorCode::SysCommonErr::Success)
+    micasense.captureAndSyncImages();
+  sleep(timeout);
   waypointList.clear();
 
-  /*! Capture and sync images from Micasense camera*/
-  ImageCapture micasense;
-  micasense.captureAndSyncImages();
-
   /*! Define waypoints.*/
-  waypointList.push_back(endPoint2);
-  waypointList.push_back(endPoint1);
+  // waypointList.push_back(endPoint2);
+  // waypointList.push_back(endPoint1);
 
-  finishedAction = DJIWaypointV2MissionFinishedGoHome;
-  ret = prsb->initMissionSetting(timeout,waypointList,finishedAction);
-  if(ret != ErrorCode::SysCommonErr::Success)
-    return ret;
-  sleep(timeout);
-
-  /*! run a new WaypointV2 mission prsb*/
-  prsb->runPrsbAlgaeMission();
+  // finishedAction = DJIWaypointV2MissionFinishedGoHome;
+  // prsb->initMissionSetting(timeout,waypointList,finishedAction);
+  
+  // /*! run a new WaypointV2 mission prsb*/
+  // ret = prsb->runPrsbAlgaeMission();
+  // if(ret == ErrorCode::SysCommonErr::Success)
+  //   micasense.captureAndSyncImages();
+  // sleep(timeout);
 
   delete(prsb);
 
