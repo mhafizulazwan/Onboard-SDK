@@ -249,7 +249,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
   sleep(timeout);
 
   /*! pause the mission*/
-  // ret = pauseWaypointMission(timeout);
+  ret = pauseWaypointMission(timeout);
   // if(ret != ErrorCode::SysCommonErr::Success)
   //   return ret;
   // sleep(5);
@@ -455,9 +455,11 @@ std::vector<DJIWaypointV2Action> PrsbAlgaeMission::generateWaypointActions(uint1
   sampleReachPointTriggerParam.terminateNum = 0;
 
   auto trigger = DJIWaypointV2Trigger(DJIWaypointV2ActionTriggerTypeSampleReachPoint,&sampleReachPointTriggerParam);
-  auto cameraActuatorParam = DJIWaypointV2CameraActuatorParam(DJIWaypointV2ActionActuatorCameraOperationTypeTakePhoto, nullptr);
-  auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeCamera, 0, &cameraActuatorParam);
-  auto action = DJIWaypointV2Action(i, trigger,actuator);
+  DJIWaypointV2AircraftControlFlyingParam   flyControlParam;
+  flyControlParam.isStartFlying = 0; // stop flying = 0
+  auto aircraftControlActuatorParam =  DJIWaypointV2AircraftControlParam(DJIWaypointV2ActionActuatorAircraftControlOperationTypeFlyingControl, flyControlParam);
+  auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeAircraftControl, 0, &aircraftActuatorParam);
+  auto action = DJIWaypointV2Action(3, trigger,actuator);
   actionVector.push_back(action);
   // }
   // return actionVector;
