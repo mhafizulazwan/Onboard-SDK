@@ -89,16 +89,16 @@ main(int argc, char** argv)
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
 
   // Define Cartesian coordinates.
-  // float32_t radius = 6;
-  // float32_t X = radius * cos(0);
-  // float32_t Y = radius * sin(0);
+  float32_t radius = 6;
+  float32_t X = radius * cos(0);
+  float32_t Y = radius * sin(0);
 
   // Define endpoint: convert Cartesian to GPS coordinates.
-  // endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
-  // endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
-  // endPoint0.relativeHeight = 15;
-  // prsb->setWaypointV2Defaults(endPoint0);
-  // waypointList.push_back(endPoint0);
+  endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
+  endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
+  endPoint0.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(endPoint0);
+  waypointList.push_back(endPoint0);
   
   endPoint1.latitude = 0.051875;
   endPoint1.longitude = 1.77572;
@@ -117,19 +117,23 @@ main(int argc, char** argv)
   
   /*Initialize the mission */ 
   DJIWaypointV2MissionFinishedAction finishedAction;
-  finishedAction = DJIWaypointV2MissionFinishedNoAction;
+  finishedAction = DJIWaypointV2MissionFinishedGoHome;
   prsb->initMissionSetting(timeout,waypointList,finishedAction);
   
   /*! Setup Micasense*/
-  ImageCapture micasense;
+  // ImageCapture micasense;
 
   /*! run a new WaypointV2 mission prsb*/
   ErrorCode::ErrorCodeType ret;
   ret = prsb->runPrsbAlgaeMission();
   if(ret == ErrorCode::SysCommonErr::Success)
-    micasense.captureAndSyncImages();
-  sleep(timeout);
-  waypointList.clear();
+  {
+    // micasense.captureAndSyncImages();
+    // sleep(timeout);
+    // DSTATUS("Mission completed successfully!");
+  }
+
+  // waypointList.clear();
 
   /*! Define waypoints.*/
   // waypointList.push_back(endPoint2);

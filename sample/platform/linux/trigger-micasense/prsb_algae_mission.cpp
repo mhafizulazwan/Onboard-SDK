@@ -31,6 +31,7 @@
 
 #include "prsb_algae_mission.hpp"
 #include "dji_waypoint_v2_action.hpp"
+#include "micasense.hpp"
 #include "memory"
 #include <ctime>
 #include <stdlib.h>
@@ -61,6 +62,14 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("missionStatePushAck->data.curWaypointIndex:%d",missionStatePushAck->data.curWaypointIndex);
         DSTATUS("missionStatePushAck->data.velocity:%d",missionStatePushAck->data.velocity);
       }
+
+      if (missionStatePushAck->data.curWaypointIndex == 3 && missionStatePushAck->data.velocity <= 2)
+      {
+        DSTATUS("Mission finished!");
+        ImageCapture micasense;
+        micasense.captureAndSyncImages();
+      }
+
     } else {
       DERROR("cmdInfo is a null value");
     }
@@ -100,6 +109,7 @@ E_OsdkStat updateMissionEvent(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
   }
   return OSDK_STAT_SYS_ERR;
 }
+
 
 PrsbAlgaeMission::PrsbAlgaeMission(Vehicle *vehicle):vehiclePtr(vehicle){
   vehiclePtr->waypointV2Mission->RegisterMissionEventCallback(vehicle->waypointV2Mission, updateMissionEvent);
@@ -228,11 +238,11 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
   ret = startWaypointMission(timeout);
   if(ret != ErrorCode::SysCommonErr::Success)
     return ret;
-  // sleep(20);
+  sleep(timeout);
 
   /*! set global cruise speed */
   setGlobalCruiseSpeed(1.5, timeout);
-  sleep(timeout);
+  sleep(200);
 
   /*! get global cruise speed */
   getGlobalCruiseSpeed(timeout);
@@ -424,7 +434,6 @@ void PrsbAlgaeMission::setGlobalCruiseSpeed(const GlobalCruiseSpeed &cruiseSpeed
 }
 
 std::vector<WaypointV2> PrsbAlgaeMission::getGPosition() {
-  // Let's create a vector to store our GPS position.
   std::vector<WaypointV2> GPosition;
   WaypointV2 Point;
 
@@ -439,19 +448,19 @@ std::vector<DJIWaypointV2Action> PrsbAlgaeMission::generateWaypointActions(uint1
 {
   std::vector<DJIWaypointV2Action> actionVector;
 
-  for(uint16_t i = 0; i < actionNum; i++)
-  {
-    DJIWaypointV2SampleReachPointTriggerParam sampleReachPointTriggerParam;
-    sampleReachPointTriggerParam.waypointIndex = i;
-    sampleReachPointTriggerParam.terminateNum = 0;
+  // for(uint16_t i = 0; i < actionNum; i++)
+  // {
+  DJIWaypointV2SampleReachPointTriggerParam sampleReachPointTriggerParam;
+  sampleReachPointTriggerParam.waypointIndex = 3;
+  sampleReachPointTriggerParam.terminateNum = 0;
 
-    auto trigger = DJIWaypointV2Trigger(DJIWaypointV2ActionTriggerTypeSampleReachPoint,&sampleReachPointTriggerParam);
-    auto cameraActuatorParam = DJIWaypointV2CameraActuatorParam(DJIWaypointV2ActionActuatorCameraOperationTypeTakePhoto, nullptr);
-    auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeCamera, 0, &cameraActuatorParam);
-    auto action = DJIWaypointV2Action(i, trigger,actuator);
-    actionVector.push_back(action);
-  }
-  return actionVector;
+  auto trigger = DJIWaypointV2Trigger(DJIWaypointV2ActionTriggerTypeSampleReachPoint,&sampleReachPointTriggerParam);
+  auto cameraActuatorParam = DJIWaypointV2CameraActuatorParam(DJIWaypointV2ActionActuatorCameraOperationTypeTakePhoto, nullptr);
+  auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeCamera, 0, &cameraActuatorParam);
+  auto action = DJIWaypointV2Action(i, trigger,actuator);
+  actionVector.push_back(action);
+  // }
+  // return actionVector;
 }
 
 void PrsbAlgaeMission::setWaypointV2Defaults(WaypointV2& waypointV2) {
