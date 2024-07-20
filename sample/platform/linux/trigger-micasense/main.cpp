@@ -81,7 +81,7 @@ main(int argc, char** argv)
   // Define startpoint.
   startPoint.latitude  = GPosition[0].latitude; 
   startPoint.longitude = GPosition[0].longitude; 
-  startPoint.relativeHeight = 15;
+  startPoint.relativeHeight = 20;
   prsb->setWaypointV2Defaults(startPoint);
   waypointList.push_back(startPoint);
   
@@ -89,20 +89,20 @@ main(int argc, char** argv)
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
 
   // Define Cartesian coordinates.
-  float32_t radius = 6;
-  float32_t X = radius * cos(0);
-  float32_t Y = radius * sin(0);
+  // float32_t radius = 6;
+  // float32_t X = radius * cos(0);
+  // float32_t Y = radius * sin(0);
 
   // Define endpoint: convert Cartesian to GPS coordinates.
-  endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
-  endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
-  endPoint0.relativeHeight = 15;
-  prsb->setWaypointV2Defaults(endPoint0);
-  waypointList.push_back(endPoint0);
+  // endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
+  // endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
+  // endPoint0.relativeHeight = 15;
+  // prsb->setWaypointV2Defaults(endPoint0);
+  // waypointList.push_back(endPoint0);
   
   endPoint1.latitude = 0.051875;
   endPoint1.longitude = 1.77572;
-  endPoint1.relativeHeight = 15;
+  endPoint1.relativeHeight = 20;
   prsb->setWaypointV2Defaults(endPoint1);
   waypointList.push_back(endPoint1);
 
@@ -111,7 +111,7 @@ main(int argc, char** argv)
 
   endPoint2.latitude = 0.051875;
   endPoint2.longitude = 1.77572;
-  endPoint2.relativeHeight = 8;
+  endPoint2.relativeHeight = 12;
   prsb->setWaypointV2Defaults(endPoint2);
   waypointList.push_back(endPoint2);
   

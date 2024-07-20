@@ -38,7 +38,9 @@
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
-//10HZ push ;1HZ print
+ImageCapture micasense;
+
+//10HZ push;1HZ print
 E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
                               const uint8_t *cmdData, void *userData) {
 
@@ -63,11 +65,12 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("missionStatePushAck->data.velocity:%d",missionStatePushAck->data.velocity);
       }
 
-      if (missionStatePushAck->data.curWaypointIndex == 3 && missionStatePushAck->data.velocity <= 2)
+      if (missionStatePushAck->data.curWaypointIndex == 2 && missionStatePushAck->data.velocity <= 5)
       {
-        DSTATUS("Mission finished!");
-        ImageCapture micasense;
+        DSTATUS("Drone arrived waypoint #3!");
+        DSTATUS("Taking picture...");
         micasense.captureAndSyncImages();
+        DSTATUS("Synchronize images...");
       }
 
     } else {
@@ -109,7 +112,6 @@ E_OsdkStat updateMissionEvent(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
   }
   return OSDK_STAT_SYS_ERR;
 }
-
 
 PrsbAlgaeMission::PrsbAlgaeMission(Vehicle *vehicle):vehiclePtr(vehicle){
   vehiclePtr->waypointV2Mission->RegisterMissionEventCallback(vehicle->waypointV2Mission, updateMissionEvent);
@@ -241,7 +243,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
   sleep(timeout);
 
   /*! set global cruise speed */
-  setGlobalCruiseSpeed(1.5, timeout);
+  setGlobalCruiseSpeed(1.0, timeout);
   sleep(200);
 
   /*! get global cruise speed */
@@ -249,7 +251,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
   sleep(timeout);
 
   /*! pause the mission*/
-  ret = pauseWaypointMission(timeout);
+  // ret = pauseWaypointMission(timeout);
   // if(ret != ErrorCode::SysCommonErr::Success)
   //   return ret;
   // sleep(5);
@@ -317,7 +319,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::uploadWaypointMission(int timeout) {
     ErrorCode::printErrorCodeMsg(ret);
     return ret;
   }
-  else
+  
   {
     DSTATUS("Upload waypoint v2 mission successfully!");
   }
@@ -448,22 +450,40 @@ std::vector<DJIWaypointV2Action> PrsbAlgaeMission::generateWaypointActions(uint1
 {
   std::vector<DJIWaypointV2Action> actionVector;
 
-  // for(uint16_t i = 0; i < actionNum; i++)
-  // {
-  DJIWaypointV2SampleReachPointTriggerParam sampleReachPointTriggerParam;
-  sampleReachPointTriggerParam.waypointIndex = 3;
-  sampleReachPointTriggerParam.terminateNum = 0;
+  for(uint16_t i = 0; i < actionNum; i++)
+  {
+    DJIWaypointV2SampleReachPointTriggerParam sampleReachPointTriggerParam;
+    sampleReachPointTriggerParam.waypointIndex = i;
+    sampleReachPointTriggerParam.terminateNum = 0;
 
-  auto trigger = DJIWaypointV2Trigger(DJIWaypointV2ActionTriggerTypeSampleReachPoint,&sampleReachPointTriggerParam);
-  DJIWaypointV2AircraftControlFlyingParam   flyControlParam;
-  flyControlParam.isStartFlying = 0; // stop flying = 0
-  auto aircraftControlActuatorParam =  DJIWaypointV2AircraftControlParam(DJIWaypointV2ActionActuatorAircraftControlOperationTypeFlyingControl, flyControlParam);
-  auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeAircraftControl, 0, &aircraftActuatorParam);
-  auto action = DJIWaypointV2Action(3, trigger,actuator);
-  actionVector.push_back(action);
-  // }
-  // return actionVector;
+    auto trigger = DJIWaypointV2Trigger(DJIWaypointV2ActionTriggerTypeSampleReachPoint,&sampleReachPointTriggerParam);
+    auto cameraActuatorParam = DJIWaypointV2CameraActuatorParam(DJIWaypointV2ActionActuatorCameraOperationTypeTakePhoto, nullptr);
+    auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeCamera, 0, &cameraActuatorParam);
+    auto action = DJIWaypointV2Action(i, trigger,actuator);
+    actionVector.push_back(action);
+  }
+  return actionVector;
 }
+// std::vector<DJIWaypointV2Action> PrsbAlgaeMission::generateWaypointActions(uint16_t actionNum)
+// {
+//   std::vector<DJIWaypointV2Action> actionVector;
+
+//   // for(uint16_t i = 0; i < actionNum; i++)
+//   // {
+//   DJIWaypointV2SampleReachPointTriggerParam sampleReachPointTriggerParam;
+//   sampleReachPointTriggerParam.waypointIndex = 3;
+//   sampleReachPointTriggerParam.terminateNum = 0;
+
+//   auto trigger = DJIWaypointV2Trigger(DJIWaypointV2ActionTriggerTypeSampleReachPoint,&sampleReachPointTriggerParam);
+//   DJIWaypointV2AircraftControlFlyingParam   flyControlParam;
+//   flyControlParam.isStartFlying = 0; // stop flying = 0
+//   auto aircraftControlActuatorParam =  DJIWaypointV2AircraftControlParam(DJIWaypointV2ActionActuatorAircraftControlOperationTypeFlyingControl, flyControlParam);
+//   auto actuator = DJIWaypointV2Actuator(DJIWaypointV2ActionActuatorTypeAircraftControl, 0, &aircraftControlActuatorParam);
+//   auto action = DJIWaypointV2Action(3, trigger,actuator);
+//   actionVector.push_back(action);
+//   // }
+//   // return actionVector;
+// }
 
 void PrsbAlgaeMission::setWaypointV2Defaults(WaypointV2& waypointV2) {
 
