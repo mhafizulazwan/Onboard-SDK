@@ -65,7 +65,7 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("missionStatePushAck->data.velocity:%d",missionStatePushAck->data.velocity);
       }
 
-      if (missionStatePushAck->data.curWaypointIndex == 2 && missionStatePushAck->data.velocity <= 5)
+      if (missionStatePushAck->data.curWaypointIndex == 3 && missionStatePushAck->data.velocity <= 5)
       {
         DSTATUS("Drone arrived waypoint #3!");
         DSTATUS("Taking picture...");
@@ -243,12 +243,12 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
   sleep(timeout);
 
   /*! set global cruise speed */
-  setGlobalCruiseSpeed(1.0, timeout);
-  sleep(200);
+  setGlobalCruiseSpeed(0.5, timeout);
+  sleep(timeout);
 
   /*! get global cruise speed */
   getGlobalCruiseSpeed(timeout);
-  sleep(timeout);
+  sleep(200);
 
   /*! pause the mission*/
   // ret = pauseWaypointMission(timeout);
@@ -494,13 +494,13 @@ void PrsbAlgaeMission::setWaypointV2Defaults(WaypointV2& waypointV2) {
 
   waypointV2.dampingDistance = 40;
   waypointV2.heading = 0;
-  waypointV2.turnMode = DJIWaypointV2TurnModeClockwise;
+  waypointV2.turnMode = DJIWaypointV2TurnModeCounterClockwise;
 
   waypointV2.pointOfInterest.positionX = 0;
   waypointV2.pointOfInterest.positionY = 0;
   waypointV2.pointOfInterest.positionZ = 0;
   waypointV2.maxFlightSpeed= 9;
-  waypointV2.autoFlightSpeed = 2;
+  waypointV2.autoFlightSpeed = 1;
 }
 
 ErrorCode::ErrorCodeType PrsbAlgaeMission::getActionRemainMemory

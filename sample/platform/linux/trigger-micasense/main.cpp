@@ -73,56 +73,70 @@ main(int argc, char** argv)
   
   // Create a vector to store waypoints in.
   std::vector<WaypointV2> waypointList;
-  WaypointV2 startPoint;
-  WaypointV2 endPoint0;
-  WaypointV2 endPoint1;
-  WaypointV2 endPoint2;
+  WaypointV2 waypoint0;
+  WaypointV2 waypoint1;
+  WaypointV2 waypoint3;
+  WaypointV2 waypoint4;
+  WaypointV2 waypointTest;
 
-  // Define startpoint.
-  startPoint.latitude  = GPosition[0].latitude; 
-  startPoint.longitude = GPosition[0].longitude; 
-  startPoint.relativeHeight = 20;
-  prsb->setWaypointV2Defaults(startPoint);
-  waypointList.push_back(startPoint);
+  // Define waypoint0.
+  waypoint0.latitude  = GPosition[0].latitude; 
+  waypoint0.longitude = GPosition[0].longitude; 
+  waypoint0.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(waypoint0);
+  waypointList.push_back(waypoint0);
   
   DSTATUS("Start point latitude:%f",GPosition[0].latitude);
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
+  
+   // Define waypoint1.
+  waypoint1.latitude = get waypoint latitude behind tank;
+  waypoint1.longitude = get waypoint longitude behind tank;
+  waypoint1.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(waypoint1);
+  waypointList.push_back(waypoint1);
 
-  // Define Cartesian coordinates.
+  // Define waypoint2.
+  waypoint2.latitude = 0.051875;
+  waypoint2.longitude = 1.77572;
+  waypoint2.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(waypoint2);
+  waypointList.push_back(waypoint2);
+
+  DSTATUS("Tank point latitude:%f",waypoint2.latitude);
+  DSTATUS("Tank point longitude:%f",waypoint2.longitude);
+
+  // Define waypoint3.
+  waypoint3.latitude = 0.051875;
+  waypoint3.longitude = 1.77572;
+  waypoint3.relativeHeight = 12;
+  prsb->setWaypointV2Defaults(waypoint3);
+  waypointList.push_back(waypoint3);
+
+  // Define waypoint4.
+  waypoint4.latitude = 0.051875;
+  waypoint4.longitude = 1.77572;
+  waypoint4.relativeHeight = 15;
+  prsb->setWaypointV2Defaults(waypoint4);
+  waypointList.push_back(waypoint4);
+
+  // Define waypointTest
   // float32_t radius = 6;
   // float32_t X = radius * cos(0);
   // float32_t Y = radius * sin(0);
 
-  // Define endpoint: convert Cartesian to GPS coordinates.
-  // endPoint0.latitude = X/EARTH_RADIUS + startPoint.latitude;
-  // endPoint0.longitude = Y/(EARTH_RADIUS * cos(startPoint.latitude)) + startPoint.longitude;
-  // endPoint0.relativeHeight = 15;
-  // prsb->setWaypointV2Defaults(endPoint0);
-  // waypointList.push_back(endPoint0);
-  
-  endPoint1.latitude = 0.051875;
-  endPoint1.longitude = 1.77572;
-  endPoint1.relativeHeight = 20;
-  prsb->setWaypointV2Defaults(endPoint1);
-  waypointList.push_back(endPoint1);
-
-  DSTATUS("End point latitude:%f",endPoint1.latitude);
-  DSTATUS("End point longitude:%f",endPoint1.longitude);
-
-  endPoint2.latitude = 0.051875;
-  endPoint2.longitude = 1.77572;
-  endPoint2.relativeHeight = 12;
-  prsb->setWaypointV2Defaults(endPoint2);
-  waypointList.push_back(endPoint2);
+  // convert Cartesian to GPS coordinates.
+  // waypointTest.latitude = X/EARTH_RADIUS + waypoint0.latitude;
+  // waypointTest.longitude = Y/(EARTH_RADIUS * cos(waypoint0.latitude)) + waypoint0.longitude;
+  // waypointTest.relativeHeight = 15;
+  // prsb->setWaypointV2Defaults(waypointTest);
+  // waypointList.push_back(waypointTest);
   
   /*Initialize the mission */ 
   DJIWaypointV2MissionFinishedAction finishedAction;
   finishedAction = DJIWaypointV2MissionFinishedGoHome;
   prsb->initMissionSetting(timeout,waypointList,finishedAction);
   
-  /*! Setup Micasense*/
-  // ImageCapture micasense;
-
   /*! run a new WaypointV2 mission prsb*/
   ErrorCode::ErrorCodeType ret;
   ret = prsb->runPrsbAlgaeMission();
@@ -136,8 +150,8 @@ main(int argc, char** argv)
   // waypointList.clear();
 
   /*! Define waypoints.*/
-  // waypointList.push_back(endPoint2);
-  // waypointList.push_back(endPoint1);
+  // waypointList.push_back(waypoint4);
+  // waypointList.push_back(waypoint2);
 
   // finishedAction = DJIWaypointV2MissionFinishedGoHome;
   // prsb->initMissionSetting(timeout,waypointList,finishedAction);
