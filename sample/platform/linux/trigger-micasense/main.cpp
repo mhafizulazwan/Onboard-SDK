@@ -75,6 +75,7 @@ main(int argc, char** argv)
   std::vector<WaypointV2> waypointList;
   WaypointV2 waypoint0;
   WaypointV2 waypoint1;
+  WaypointV2 waypoint2;
   WaypointV2 waypoint3;
   WaypointV2 waypoint4;
   WaypointV2 waypointTest;
@@ -90,8 +91,8 @@ main(int argc, char** argv)
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
   
    // Define waypoint1.
-  waypoint1.latitude = get waypoint latitude behind tank;
-  waypoint1.longitude = get waypoint longitude behind tank;
+  waypoint1.latitude = 0.051875; // get waypoint latitude behind tank;
+  waypoint1.longitude = 1.77572; // get waypoint longitude behind tank;
   waypoint1.relativeHeight = 15;
   prsb->setWaypointV2Defaults(waypoint1);
   waypointList.push_back(waypoint1);

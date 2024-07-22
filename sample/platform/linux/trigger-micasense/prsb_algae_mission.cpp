@@ -39,6 +39,7 @@ using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
 ImageCapture micasense;
+static bool hasCapturedImage = false;
 
 //10HZ push;1HZ print
 E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
@@ -65,14 +66,18 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("missionStatePushAck->data.velocity:%d",missionStatePushAck->data.velocity);
       }
 
-      if (missionStatePushAck->data.curWaypointIndex == 3 && missionStatePushAck->data.velocity <= 5)
+      if (!hasCapturedImage)
       {
+        if (missionStatePushAck->data.curWaypointIndex == 3 && missionStatePushAck->data.velocity <= 5)
+        {
         DSTATUS("Drone arrived waypoint #3!");
         DSTATUS("Taking picture...");
         micasense.captureAndSyncImages();
         DSTATUS("Synchronize images...");
+        hasCapturedImage = true;
+        }
       }
-
+      
     } else {
       DERROR("cmdInfo is a null value");
     }
