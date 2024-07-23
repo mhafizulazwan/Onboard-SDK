@@ -248,12 +248,12 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::runPrsbAlgaeMission()
   sleep(timeout);
 
   /*! set global cruise speed */
-  setGlobalCruiseSpeed(0.5, timeout);
+  setGlobalCruiseSpeed(1.0, timeout);
   sleep(timeout);
 
   /*! get global cruise speed */
   getGlobalCruiseSpeed(timeout);
-  sleep(200);
+  sleep(400);
 
   /*! pause the mission*/
   // ret = pauseWaypointMission(timeout);

@@ -91,7 +91,7 @@ main(int argc, char** argv)
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
   
    // Define waypoint1.
-  waypoint1.latitude = 0.051875; // get waypoint latitude behind tank;
+  waypoint1.latitude = 0.0518767; // get waypoint latitude behind tank;
   waypoint1.longitude = 1.77572; // get waypoint longitude behind tank;
   waypoint1.relativeHeight = 15;
   prsb->setWaypointV2Defaults(waypoint1);
