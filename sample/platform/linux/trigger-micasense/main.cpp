@@ -77,49 +77,61 @@ main(int argc, char** argv)
   WaypointV2 waypoint1;
   WaypointV2 waypoint2;
   WaypointV2 waypoint3;
-  WaypointV2 waypoint4;
   WaypointV2 waypointTest;
 
   // Define waypoint0.
   waypoint0.latitude  = GPosition[0].latitude; 
   waypoint0.longitude = GPosition[0].longitude; 
   waypoint0.relativeHeight = 15;
+  waypoint0.config.useLocalCruiseVel = 0;
+  waypoint0.autoFlightSpeed = 1;
+  waypoint0.headingMode = DJIWaypointV2HeadingWaypointCustom;
+  waypoint0.heading = -67; // -180 to 180: 0 True North
+  waypoint0.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint0);
   waypointList.push_back(waypoint0);
   
   DSTATUS("Start point latitude:%f",GPosition[0].latitude);
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
   
-   // Define waypoint1.
-  waypoint1.latitude = 0.0518767; // get waypoint latitude behind tank;
-  waypoint1.longitude = 1.77572; // get waypoint longitude behind tank;
+  // Define waypoint1.
+  waypoint1.latitude = 0.051875;
+  waypoint1.longitude = 1.77572;
   waypoint1.relativeHeight = 15;
+  waypoint1.config.useLocalCruiseVel = 0;
+  waypoint1.autoFlightSpeed = 1.5;
+  waypoint1.headingMode = DJIWaypointV2HeadingWaypointCustom;
+  waypoint1.heading = -155; // -180 to 180: 0 True North
+  waypoint1.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint1);
   waypointList.push_back(waypoint1);
+
+  DSTATUS("Tank point latitude:%f",waypoint1.latitude);
+  DSTATUS("Tank point longitude:%f",waypoint1.longitude);
 
   // Define waypoint2.
   waypoint2.latitude = 0.051875;
   waypoint2.longitude = 1.77572;
-  waypoint2.relativeHeight = 15;
+  waypoint2.relativeHeight = 10;
+  waypoint2.config.useLocalCruiseVel = 0;
+  waypoint2.autoFlightSpeed = 0.5;
+  waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
+  waypoint2.heading = -155; // -180 to 180: 0 True North
+  waypoint2.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint2);
   waypointList.push_back(waypoint2);
-
-  DSTATUS("Tank point latitude:%f",waypoint2.latitude);
-  DSTATUS("Tank point longitude:%f",waypoint2.longitude);
 
   // Define waypoint3.
   waypoint3.latitude = 0.051875;
   waypoint3.longitude = 1.77572;
-  waypoint3.relativeHeight = 12;
+  waypoint3.relativeHeight = 15;
+  waypoint3.config.useLocalCruiseVel = 0;
+  waypoint3.autoFlightSpeed = 1;
+  waypoint3.headingMode = DJIWaypointV2HeadingWaypointCustom;
+  waypoint3.heading = 114; // -180 to 180: 0 True North
+  waypoint3.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint3);
   waypointList.push_back(waypoint3);
-
-  // Define waypoint4.
-  waypoint4.latitude = 0.051875;
-  waypoint4.longitude = 1.77572;
-  waypoint4.relativeHeight = 15;
-  prsb->setWaypointV2Defaults(waypoint4);
-  waypointList.push_back(waypoint4);
 
   // Define waypointTest
   // float32_t radius = 6;
@@ -151,8 +163,8 @@ main(int argc, char** argv)
   // waypointList.clear();
 
   /*! Define waypoints.*/
-  // waypointList.push_back(waypoint4);
-  // waypointList.push_back(waypoint2);
+  // waypointList.push_back(waypoint3);
+  // waypointList.push_back(waypoint1);
 
   // finishedAction = DJIWaypointV2MissionFinishedGoHome;
   // prsb->initMissionSetting(timeout,waypointList,finishedAction);
