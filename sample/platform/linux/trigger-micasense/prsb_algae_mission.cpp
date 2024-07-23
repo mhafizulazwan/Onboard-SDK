@@ -294,7 +294,7 @@ ErrorCode::ErrorCodeType PrsbAlgaeMission::initMissionSetting(int timeout, std::
   missionInitSettings.repeatTimes  = 1;
   missionInitSettings.finishedAction = finishedAction;
   missionInitSettings.maxFlightSpeed = 10;
-  missionInitSettings.autoFlightSpeed = 2;
+  missionInitSettings.autoFlightSpeed = 1.5;
   missionInitSettings.exitMissionOnRCSignalLost = 1;
   missionInitSettings.gotoFirstWaypointMode = DJIWaypointV2MissionGotoFirstWaypointModePointToPoint;
   missionInitSettings.mission =  GPosition;
