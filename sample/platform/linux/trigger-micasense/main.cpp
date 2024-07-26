@@ -95,7 +95,7 @@ main(int argc, char** argv)
   DSTATUS("Start point longitude:%f",GPosition[0].longitude);
   
   // Define waypoint1.
-  waypoint1.latitude = 0.051875;
+  waypoint1.latitude = 0.051876;
   waypoint1.longitude = 1.77572;
   waypoint1.relativeHeight = 15;
   waypoint1.config.useLocalCruiseVel = 0;
@@ -110,9 +110,9 @@ main(int argc, char** argv)
   DSTATUS("Tank point longitude:%f",waypoint1.longitude);
 
   // Define waypoint2.
-  waypoint2.latitude = 0.051875;
+  waypoint2.latitude = 0.051876;
   waypoint2.longitude = 1.77572;
-  waypoint2.relativeHeight = 10;
+  waypoint2.relativeHeight = 12;
   waypoint2.config.useLocalCruiseVel = 0;
   waypoint2.autoFlightSpeed = 0.8;
   waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
@@ -122,7 +122,7 @@ main(int argc, char** argv)
   waypointList.push_back(waypoint2);
 
   // Define waypoint3.
-  waypoint3.latitude = 0.051875;
+  waypoint3.latitude = 0.051876;
   waypoint3.longitude = 1.77572;
   waypoint3.relativeHeight = 15;
   waypoint3.config.useLocalCruiseVel = 0;
