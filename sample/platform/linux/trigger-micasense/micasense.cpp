@@ -115,14 +115,14 @@ void ImageCapture::captureAndSyncImages() {
     curl_global_cleanup();
 
     // Sync images to dropbox
-    int result = system("rclonesync --first-sync airas:/micasense_images ~/dropbox/micasense_images");
-    if (result != 0) {
-        // Handle error
-        std::cerr << "Error running rclonesync command. Return code: " << result << std::endl;
-    }
-    else {
-        std::cout << "Images synced to dropbox" << std::endl;
-    }
+    // int result = system("rclonesync --first-sync airas:/micasense_images ~/dropbox/micasense_images");
+    // if (result != 0) {
+    //     // Handle error
+    //     std::cerr << "Error running rclonesync command. Return code: " << result << std::endl;
+    // }
+    // else {
+    //     std::cout << "Images synced to dropbox" << std::endl;
+    // }
 }
 
 size_t ImageCapture::VectorCallback(void* contents, size_t size, size_t nmemb, std::vector<unsigned char>* s) {
