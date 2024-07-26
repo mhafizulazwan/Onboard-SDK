@@ -101,7 +101,7 @@ main(int argc, char** argv)
   waypoint1.config.useLocalCruiseVel = 0;
   waypoint1.autoFlightSpeed = 1.5;
   waypoint1.headingMode = DJIWaypointV2HeadingWaypointCustom;
-  waypoint1.heading = -155; // -180 to 180: 0 True North (-155 align with tank)
+  waypoint1.heading = -161; // -180 to 180: 0 True North (-155 align with tank)
   waypoint1.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint1);
   waypointList.push_back(waypoint1);
@@ -116,7 +116,7 @@ main(int argc, char** argv)
   waypoint2.config.useLocalCruiseVel = 0;
   waypoint2.autoFlightSpeed = 0.8;
   waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
-  waypoint2.heading = -155; // -180 to 180: 0 True North (-155 align with tank)
+  waypoint2.heading = -161; // -180 to 180: 0 True North (-155 align with tank)
   waypoint2.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint2);
   waypointList.push_back(waypoint2);
