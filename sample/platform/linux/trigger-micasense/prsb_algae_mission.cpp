@@ -76,6 +76,7 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("Taking RGB images...");
         micasense.captureAndSyncImages();
         DSTATUS("Synchronize images...");
+        wp2Ptr->resume(1);
         hasCapturedImage = true;
         }
       }
