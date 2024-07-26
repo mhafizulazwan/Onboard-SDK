@@ -68,10 +68,12 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
 
       if (!hasCapturedImage)
       {
-        if (missionStatePushAck->data.curWaypointIndex == 2 && missionStatePushAck->data.velocity <= 1)
+        if (missionStatePushAck->data.curWaypointIndex == 2 && missionStatePushAck->data.velocity <= 3)
         {
-        DSTATUS("Drone arrived waypoint #3!");
-        DSTATUS("Taking picture...");
+        DSTATUS("Drone arrived waypoint #2!");
+        DSTATUS("Pause mission for 5 seconds...");
+        wp2Ptr->pause(5);
+        DSTATUS("Taking RGB images...");
         micasense.captureAndSyncImages();
         DSTATUS("Synchronize images...");
         hasCapturedImage = true;

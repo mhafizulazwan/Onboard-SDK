@@ -114,7 +114,7 @@ main(int argc, char** argv)
   waypoint2.longitude = 1.77572;
   waypoint2.relativeHeight = 10;
   waypoint2.config.useLocalCruiseVel = 0;
-  waypoint2.autoFlightSpeed = 0.5;
+  waypoint2.autoFlightSpeed = 0.8;
   waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
   waypoint2.heading = -155; // -180 to 180: 0 True North
   waypoint2.turnMode = DJIWaypointV2TurnModeCounterClockwise;
