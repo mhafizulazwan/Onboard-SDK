@@ -74,9 +74,10 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("Pause mission for 5 seconds...");
         wp2Ptr->pause(5);
         DSTATUS("Taking RGB images...");
-        micasense.captureAndSyncImages();
-        DSTATUS("Synchronize images...");
+        micasense.captureImages();
         wp2Ptr->resume(1);
+        DSTATUS("Synchronize images to Dropbox...");
+        micasense.syncImagesToDropbox();
         hasCapturedImage = true;
         }
       }

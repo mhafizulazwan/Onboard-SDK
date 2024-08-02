@@ -14,7 +14,8 @@
 
 class ImageCapture {
 public:
-    void captureAndSyncImages();
+    void captureImages();
+    void syncImagesToDropbox();
 
 private:
     std::string micasense_ip = "192.168.0.85";
