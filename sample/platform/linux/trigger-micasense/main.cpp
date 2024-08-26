@@ -82,7 +82,7 @@ main(int argc, char** argv)
   // Define waypoint0.
   waypoint0.latitude  = GPosition[0].latitude; 
   waypoint0.longitude = GPosition[0].longitude; 
-  waypoint0.relativeHeight = 15;
+  waypoint0.relativeHeight = 15; // default
   waypoint0.config.useLocalCruiseVel = 0;
   waypoint0.autoFlightSpeed = 1;
   waypoint0.headingMode = DJIWaypointV2HeadingWaypointCustom;
@@ -97,7 +97,7 @@ main(int argc, char** argv)
   // Define waypoint1.
   waypoint1.latitude = 0.0518756;
   waypoint1.longitude = 1.77572;
-  waypoint1.relativeHeight = 15;
+  waypoint1.relativeHeight = 15; // default
   waypoint1.config.useLocalCruiseVel = 0;
   waypoint1.autoFlightSpeed = 1.5;
   waypoint1.headingMode = DJIWaypointV2HeadingWaypointCustom;
@@ -112,7 +112,7 @@ main(int argc, char** argv)
   // Define waypoint2.
   waypoint2.latitude = 0.0518756;
   waypoint2.longitude = 1.77572;
-  waypoint2.relativeHeight = 12;
+  waypoint2.relativeHeight = 12; // default
   waypoint2.config.useLocalCruiseVel = 0;
   waypoint2.autoFlightSpeed = 0.8;
   waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
@@ -124,7 +124,7 @@ main(int argc, char** argv)
   // Define waypoint3.
   waypoint3.latitude = 0.0518756;
   waypoint3.longitude = 1.77572;
-  waypoint3.relativeHeight = 15;
+  waypoint3.relativeHeight = 15; // default
   waypoint3.config.useLocalCruiseVel = 0;
   waypoint3.autoFlightSpeed = 1;
   waypoint3.headingMode = DJIWaypointV2HeadingWaypointCustom;
