@@ -39,7 +39,9 @@ using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
 ImageCapture micasense;
-static bool hasCapturedImage = false;
+static bool hasCapturedImage1 = false;
+static bool hasCapturedImage2 = false;
+static bool hasCapturedImage3 = false;
 
 //10HZ push;1HZ print
 E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
@@ -66,7 +68,7 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("missionStatePushAck->data.velocity:%d",missionStatePushAck->data.velocity);
       }
 
-      if (!hasCapturedImage)
+      if (!hasCapturedImage1)
       {
         if (missionStatePushAck->data.curWaypointIndex == 2 && missionStatePushAck->data.velocity <= 3)
         {
@@ -76,9 +78,37 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("Taking RGB images...");
         micasense.captureImages();
         wp2Ptr->resume(1);
+        hasCapturedImage1 = true;
+        }
+      }
+
+      if (!hasCapturedImage2)
+      {
+        if (missionStatePushAck->data.curWaypointIndex == 3 && missionStatePushAck->data.velocity <= 3)
+        {
+        DSTATUS("Drone arrived waypoint #3!");
+        DSTATUS("Pause mission for 5 seconds...");
+        wp2Ptr->pause(5);
+        DSTATUS("Taking RGB images...");
+        micasense.captureImages();
+        wp2Ptr->resume(1);
+        hasCapturedImage2 = true;
+        }
+      }
+
+      if (!hasCapturedImage3)
+      {
+        if (missionStatePushAck->data.curWaypointIndex == 4 && missionStatePushAck->data.velocity <= 3)
+        {
+        DSTATUS("Drone arrived waypoint #4!");
+        DSTATUS("Pause mission for 5 seconds...");
+        wp2Ptr->pause(5);
+        DSTATUS("Taking RGB images...");
+        micasense.captureImages();
+        wp2Ptr->resume(1);
         DSTATUS("Synchronize images to Dropbox...");
         micasense.syncImagesToDropbox();
-        hasCapturedImage = true;
+        hasCapturedImage3 = true;
         }
       }
       
