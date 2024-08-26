@@ -149,7 +149,7 @@ std::string ImageCapture::getCurrentTimestamp() {
     }
 
 void ImageCapture::syncImagesToDropbox() {
-        int result = system("rclonesync --first-sync airas:/micasense_images ~/dropbox/micasense_images");
+        int result = system("rclonesync --first-sync airas:/micasense_images ~/dropbox/dry_run2");
         if (result != 0) {
             // Handle error
             std::cerr << "Error running rclonesync command. Return code: " << result << std::endl;
