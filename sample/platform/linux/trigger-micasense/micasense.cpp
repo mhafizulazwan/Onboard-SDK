@@ -68,7 +68,7 @@ void ImageCapture::captureImages() {
                     filename = timestamp + "_" + filename;
 
                     // Save the data
-                    std::ofstream jpeg_file("/home/robotics/dropbox/micasense_images/jpeg/" + filename, std::ios::binary);
+                    std::ofstream jpeg_file("/home/robotics/dropbox/dry_run2/jpeg/" + filename, std::ios::binary);
                     jpeg_file.write(reinterpret_cast<const char*>(jpeg_data.data()), jpeg_data.size());
                     jpeg_file.close();
                 }
@@ -101,7 +101,7 @@ void ImageCapture::captureImages() {
                     filename = timestamp + "_" + filename;
 
                     // Save the data
-                    std::ofstream tiff_file("/home/robotics/dropbox/micasense_images/tiff/" + filename, std::ios::binary);
+                    std::ofstream tiff_file("/home/robotics/dropbox/dry_run2/tiff/" + filename, std::ios::binary);
                     tiff_file.write(reinterpret_cast<const char*>(tiff_data.data()), tiff_data.size());
                     tiff_file.close();
                 }
