@@ -144,12 +144,12 @@ std::string ImageCapture::getCurrentTimestamp() {
     std::time_t now_time = std::chrono::system_clock::to_time_t(now);
     std::tm* ltm = std::localtime(&now_time);
     char buffer[20];
-    std::strftime(buffer, sizeof(buffer), "%Y%m%d%H%M", ltm);
+    std::strftime(buffer, sizeof(buffer), "%Y%m%d%H%M%S", ltm);
     return std::string(buffer);
     }
 
 void ImageCapture::syncImagesToDropbox() {
-        int result = system("rclonesync --first-sync airas:/micasense_images ~/dropbox/dry_run2");
+        int result = system("rclonesync --first-sync airas:/dry_run2 ~/dropbox/dry_run2");
         if (result != 0) {
             // Handle error
             std::cerr << "Error running rclonesync command. Return code: " << result << std::endl;

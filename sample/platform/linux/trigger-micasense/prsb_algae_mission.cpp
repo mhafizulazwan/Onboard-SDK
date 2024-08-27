@@ -75,6 +75,7 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("Drone arrived waypoint #2!");
         DSTATUS("Pause mission for 5 seconds...");
         wp2Ptr->pause(5);
+        sleep(3); // wait for the drone to stabilize
         DSTATUS("Taking RGB images...");
         micasense.captureImages();
         wp2Ptr->resume(1);
@@ -89,6 +90,7 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("Drone arrived waypoint #3!");
         DSTATUS("Pause mission for 5 seconds...");
         wp2Ptr->pause(5);
+        sleep(3); // wait for the drone to stabilize
         DSTATUS("Taking RGB images...");
         micasense.captureImages();
         wp2Ptr->resume(1);
@@ -103,6 +105,7 @@ E_OsdkStat updateMissionState(T_CmdHandle *cmdHandle, const T_CmdInfo *cmdInfo,
         DSTATUS("Drone arrived waypoint #4!");
         DSTATUS("Pause mission for 5 seconds...");
         wp2Ptr->pause(5);
+        sleep(3); // wait for the drone to stabilize
         DSTATUS("Taking RGB images...");
         micasense.captureImages();
         wp2Ptr->resume(1);

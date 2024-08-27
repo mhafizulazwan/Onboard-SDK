@@ -77,6 +77,8 @@ main(int argc, char** argv)
   WaypointV2 waypoint1;
   WaypointV2 waypoint2;
   WaypointV2 waypoint3;
+  WaypointV2 waypoint4;
+  WaypointV2 waypoint5;
   WaypointV2 waypointTest;
 
   // Define waypoint0.
@@ -122,40 +124,40 @@ main(int argc, char** argv)
   waypointList.push_back(waypoint2);
 
   // Define waypoint3.
-  waypoint2.latitude = 0.0518756;
-  waypoint2.longitude = 1.77572;
-  waypoint2.relativeHeight = 14; // default
-  waypoint2.config.useLocalCruiseVel = 0;
-  waypoint2.autoFlightSpeed = 0.8;
-  waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
-  waypoint2.heading = -161; // -180 to 180: 0 True North (-155 align with tank)
-  waypoint2.turnMode = DJIWaypointV2TurnModeCounterClockwise;
-  prsb->setWaypointV2Defaults(waypoint2);
-  waypointList.push_back(waypoint2);
-
-  // Define waypoint4.
-  waypoint2.latitude = 0.0518756;
-  waypoint2.longitude = 1.77572;
-  waypoint2.relativeHeight = 12; // default
-  waypoint2.config.useLocalCruiseVel = 0;
-  waypoint2.autoFlightSpeed = 0.8;
-  waypoint2.headingMode = DJIWaypointV2HeadingWaypointCustom;
-  waypoint2.heading = -161; // -180 to 180: 0 True North (-155 align with tank)
-  waypoint2.turnMode = DJIWaypointV2TurnModeCounterClockwise;
-  prsb->setWaypointV2Defaults(waypoint2);
-  waypointList.push_back(waypoint2);
-
-  // Define waypoint5.
   waypoint3.latitude = 0.0518756;
   waypoint3.longitude = 1.77572;
-  waypoint3.relativeHeight = 18; // default
+  waypoint3.relativeHeight = 14; // default
   waypoint3.config.useLocalCruiseVel = 0;
-  waypoint3.autoFlightSpeed = 1;
+  waypoint3.autoFlightSpeed = 0.8;
   waypoint3.headingMode = DJIWaypointV2HeadingWaypointCustom;
-  waypoint3.heading = 114; // -180 to 180: 0 True North (114 facing home)
+  waypoint3.heading = -161; // -180 to 180: 0 True North (-155 align with tank)
   waypoint3.turnMode = DJIWaypointV2TurnModeCounterClockwise;
   prsb->setWaypointV2Defaults(waypoint3);
   waypointList.push_back(waypoint3);
+
+  // Define waypoint4.
+  waypoint4.latitude = 0.0518756;
+  waypoint4.longitude = 1.77572;
+  waypoint4.relativeHeight = 12; // default
+  waypoint4.config.useLocalCruiseVel = 0;
+  waypoint4.autoFlightSpeed = 0.8;
+  waypoint4.headingMode = DJIWaypointV2HeadingWaypointCustom;
+  waypoint4.heading = -161; // -180 to 180: 0 True North (-155 align with tank)
+  waypoint4.turnMode = DJIWaypointV2TurnModeCounterClockwise;
+  prsb->setWaypointV2Defaults(waypoint4);
+  waypointList.push_back(waypoint4);
+
+  // Define waypoint5.
+  waypoint5.latitude = 0.0518756;
+  waypoint5.longitude = 1.77572;
+  waypoint5.relativeHeight = 18; // default
+  waypoint5.config.useLocalCruiseVel = 0;
+  waypoint5.autoFlightSpeed = 1;
+  waypoint5.headingMode = DJIWaypointV2HeadingWaypointCustom;
+  waypoint5.heading = 114; // -180 to 180: 0 True North (114 facing home)
+  waypoint5.turnMode = DJIWaypointV2TurnModeCounterClockwise;
+  prsb->setWaypointV2Defaults(waypoint5);
+  waypointList.push_back(waypoint5);
 
   // Define waypointTest
   // float32_t radius = 6;
