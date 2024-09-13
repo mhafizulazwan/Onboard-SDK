@@ -150,6 +150,7 @@ std::string ImageCapture::getCurrentTimestamp() {
 
 void ImageCapture::syncImagesToDropbox() {
         int result = system("rclonesync --first-sync airas:/dry_run2 ~/dropbox/dry_run2");
+        // int result = system("rclonesync airas:/dry_run2 ~/dropbox/dry_run2");
         if (result != 0) {
             // Handle error
             std::cerr << "Error running rclonesync command. Return code: " << result << std::endl;
